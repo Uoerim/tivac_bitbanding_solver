@@ -71,62 +71,25 @@
             <section class="config-panel glass-card">
                 <h2 class="section-title">
                     <span class="title-icon">⚙️</span>
-                    GPIO Port Configuration
+                    Configuration
                 </h2>
-                <div class="gpio-port-selector">
-                    <label>Select GPIO Port:</label>
-                    <div class="port-buttons">
-                        <button class="port-btn" data-port="A" data-base="0x40004000">Port A</button>
-                        <button class="port-btn" data-port="B" data-base="0x40005000">Port B</button>
-                        <button class="port-btn" data-port="C" data-base="0x40006000">Port C</button>
-                        <button class="port-btn" data-port="D" data-base="0x40007000">Port D</button>
-                        <button class="port-btn" data-port="E" data-base="0x40024000">Port E</button>
-                        <button class="port-btn active" data-port="F" data-base="0x40025000">Port F</button>
+                <div class="config-grid">
+                    <div class="gpio-port-selector">
+                        <label>Select GPIO Port:</label>
+                        <div class="port-buttons">
+                            <button class="port-btn" data-port="A" data-base="0x40004000">Port A</button>
+                            <button class="port-btn" data-port="B" data-base="0x40005000">Port B</button>
+                            <button class="port-btn" data-port="C" data-base="0x40006000">Port C</button>
+                            <button class="port-btn" data-port="D" data-base="0x40007000">Port D</button>
+                            <button class="port-btn" data-port="E" data-base="0x40024000">Port E</button>
+                            <button class="port-btn active" data-port="F" data-base="0x40025000">Port F</button>
+                        </div>
                     </div>
-                </div>
-
-                <div class="register-config">
-                    <h3>Register Configuration (like exam questions)</h3>
-                    <div class="register-inputs">
-                        <div class="register-input-group">
-                            <label>
-                                <span class="reg-label">GPIO_PORT<span id="portLetter">F</span>_DIR</span>
-                                <span class="reg-desc">Direction (1=Output, 0=Input)</span>
-                            </label>
-                            <div class="input-with-prefix">
-                                <span class="prefix">|=</span>
-                                <input type="text" id="dirValue" value="0x0F" placeholder="0x0F">
-                            </div>
-                        </div>
-                        <div class="register-input-group">
-                            <label>
-                                <span class="reg-label">GPIO_PORT<span id="portLetter2">F</span>_DEN</span>
-                                <span class="reg-desc">Digital Enable</span>
-                            </label>
-                            <div class="input-with-prefix">
-                                <span class="prefix">|=</span>
-                                <input type="text" id="denValue" value="0x1F" placeholder="0x1F">
-                            </div>
-                        </div>
-                        <div class="register-input-group">
-                            <label>
-                                <span class="reg-label">GPIO_PORT<span id="portLetter3">F</span>_PUR</span>
-                                <span class="reg-desc">Pull-Up Resistor</span>
-                            </label>
-                            <div class="input-with-prefix">
-                                <span class="prefix">|=</span>
-                                <input type="text" id="purValue" value="0x10" placeholder="0x10">
-                            </div>
-                        </div>
-                        <div class="register-input-group">
-                            <label>
-                                <span class="reg-label">GPIO_PORT<span id="portLetter4">F</span>_PDR</span>
-                                <span class="reg-desc">Pull-Down Resistor</span>
-                            </label>
-                            <div class="input-with-prefix">
-                                <span class="prefix">|=</span>
-                                <input type="text" id="pdrValue" value="0x00" placeholder="0x00">
-                            </div>
+                    <div class="row-count-selector">
+                        <label for="rowCount">Table Rows:</label>
+                        <div class="row-count-controls">
+                            <input type="range" id="rowCount" min="1" max="15" value="8">
+                            <span id="rowCountDisplay" class="row-count-value">8</span>
                         </div>
                     </div>
                 </div>

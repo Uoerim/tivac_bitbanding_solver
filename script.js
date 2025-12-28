@@ -32,6 +32,7 @@ const GPIO_PORTS = {
 let currentPort = 'F';
 let baseAddress = 0x40025000;
 let portValue = 0x00;  // Current port data value (8 bits)
+let rowCount = 8;      // Number of table rows (1-15)
 let lastEditedCell = null;
 
 // =====================================================
@@ -140,8 +141,6 @@ function handleWrite(address, writeValue) {
 function generateTable() {
     const tableBody = document.getElementById('tableBody');
     tableBody.innerHTML = '';
-
-    const rowCount = 8;
 
     for (let row = 0; row < rowCount; row++) {
         const tr = document.createElement('tr');
@@ -411,11 +410,6 @@ function handlePortClick(event) {
     currentPort = btn.dataset.port;
     baseAddress = parseInt(btn.dataset.base);
 
-    // Update port letters in labels
-    document.querySelectorAll('#portLetter, #portLetter2, #portLetter3').forEach(el => {
-        el.textContent = currentPort;
-    });
-
     // Update base address display
     document.getElementById('baseAddressDisplay').textContent = toHex(baseAddress);
 
@@ -449,20 +443,18 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', handlePortClick);
     });
 
+    // Row count slider handler
+    const rowCountSlider = document.getElementById('rowCount');
+    const rowCountDisplay = document.getElementById('rowCountDisplay');
+
+    rowCountSlider.addEventListener('input', () => {
+        rowCount = parseInt(rowCountSlider.value);
+        rowCountDisplay.textContent = rowCount;
+        generateTable();
+    });
+
     // Generate initial table
     generateTable();
-
-    // Register value input handlers (for reference display)
-    const dirInput = document.getElementById('dirValue');
-    const denInput = document.getElementById('denValue');
-    const purInput = document.getElementById('purValue');
-
-    // These are just for display reference, show register config
-    [dirInput, denInput, purInput].forEach(input => {
-        input.addEventListener('change', () => {
-            // Could add validation or display here
-        });
-    });
 
     // Modal close handler
     const modal = document.getElementById('warningModal');
