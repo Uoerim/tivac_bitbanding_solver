@@ -29,9 +29,10 @@ A professional web-based calculator for solving TivaC TM4C123 GPIO bit-banding a
 ### Key Features
 
 - 🎯 **GPIO Data Masking Calculator** - Calculate masked values for GPIO port addresses
-- 📊 **Interactive Memory Table** - Click any cell to edit and see all values update
+- 📊 **Interactive Memory Table** - Click any cell to edit and see all values update automatically
 - 📝 **Step-by-Step Explanations** - Detailed breakdown of each calculation
-- ⚙️ **Register Configuration** - Set DIR, DEN, PUR values like exam questions
+- 🔧 **Configurable Table Size** - Adjust rows from 1 to 15
+- 🔘 **Port Selection** - Switch between GPIO Ports A-F
 - 🎨 **Modern UI** - Professional dark theme with glassmorphism effects
 
 ---
@@ -66,22 +67,33 @@ Only bits where the mask has 1s are affected by the write.
 
 3. Select a GPIO port (A-F)
 
-4. Click any cell in the memory table to edit
+4. Adjust the table rows if needed (1-15)
 
-5. Watch all values update and read the step-by-step explanation!
+5. Click any cell in the memory table to edit
+
+6. Watch all values update and read the step-by-step explanation!
 
 ---
 
-## 📚 Theory Reference
+## 📚 Important Notes
 
-| Register | Offset | Description |
-|----------|--------|-------------|
-| GPIODIR  | +0x400 | Direction (1=Output) |
-| GPIODEN  | +0x51C | Digital Enable |
-| GPIOPUR  | +0x510 | Pull-Up Resistor |
-| GPIOPDR  | +0x514 | Pull-Down Resistor |
+### For Exam Questions (Memory Table)
+The memory table values depend **ONLY** on:
+- The data latch value (what you last wrote)
+- The mask calculated from the address
 
-### GPIO Port Base Addresses
+**DIR, DEN, PUR do NOT affect the memory table values.**
+
+### For Hardware (LEDs, Buttons)
+To make writes work electrically on real hardware:
+- **DIR** - Direction (1=Output, 0=Input)
+- **DEN** - Digital Enable
+- **PUR** - Pull-Up Resistor
+- **PDR** - Pull-Down Resistor
+
+---
+
+## 📋 GPIO Port Base Addresses
 
 | Port | Base Address |
 |------|--------------|
@@ -105,6 +117,10 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 This project is open source and available under the [MIT License](LICENSE).
 
 ---
+
+<p align="center">
+  Made with ❤️ by <strong>Yosif Ibrahim</strong>
+</p>
 
 <p align="center">
   Built for TivaC TM4C123 | ARM Cortex-M4 Architecture
