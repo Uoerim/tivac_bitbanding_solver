@@ -73,24 +73,60 @@
                     <span class="title-icon">⚙️</span>
                     Configuration
                 </h2>
-                <div class="config-grid">
-                    <div class="gpio-port-selector">
-                        <label>Select GPIO Port:</label>
-                        <div class="port-buttons">
-                            <button class="port-btn" data-port="A" data-base="0x40004000">Port A</button>
-                            <button class="port-btn" data-port="B" data-base="0x40005000">Port B</button>
-                            <button class="port-btn" data-port="C" data-base="0x40006000">Port C</button>
-                            <button class="port-btn" data-port="D" data-base="0x40007000">Port D</button>
-                            <button class="port-btn" data-port="E" data-base="0x40024000">Port E</button>
-                            <button class="port-btn active" data-port="F" data-base="0x40025000">Port F</button>
+
+                <!-- Register Configuration -->
+                <div class="register-config">
+                    <h3>GPIO Port F Register Configuration</h3>
+                    <p class="register-hint">Enter hex values (e.g., 0x0E). Table updates automatically.</p>
+                    <div class="register-inputs-grid">
+                        <div class="register-input-item">
+                            <label for="dirInput">
+                                <span class="reg-name">GPIO_PORTF_DIR</span>
+                                <span class="reg-desc">Direction (1=Out, 0=In)</span>
+                            </label>
+                            <div class="input-with-prefix">
+                                <span class="prefix">=</span>
+                                <input type="text" id="dirInput" value="0x00" placeholder="0x00">
+                            </div>
+                        </div>
+                        <div class="register-input-item">
+                            <label for="denInput">
+                                <span class="reg-name">GPIO_PORTF_DEN</span>
+                                <span class="reg-desc">Digital Enable</span>
+                            </label>
+                            <div class="input-with-prefix">
+                                <span class="prefix">=</span>
+                                <input type="text" id="denInput" value="0x00" placeholder="0x00">
+                            </div>
+                        </div>
+                        <div class="register-input-item">
+                            <label for="purInput">
+                                <span class="reg-name">GPIO_PORTF_PUR</span>
+                                <span class="reg-desc">Pull-Up Resistor</span>
+                            </label>
+                            <div class="input-with-prefix">
+                                <span class="prefix">=</span>
+                                <input type="text" id="purInput" value="0x00" placeholder="0x00">
+                            </div>
+                        </div>
+                        <div class="register-input-item">
+                            <label for="pdrInput">
+                                <span class="reg-name">GPIO_PORTF_PDR</span>
+                                <span class="reg-desc">Pull-Down Resistor</span>
+                            </label>
+                            <div class="input-with-prefix">
+                                <span class="prefix">=</span>
+                                <input type="text" id="pdrInput" value="0x00" placeholder="0x00">
+                            </div>
                         </div>
                     </div>
-                    <div class="row-count-selector">
-                        <label for="rowCount">Table Rows:</label>
-                        <div class="row-count-controls">
-                            <input type="range" id="rowCount" min="1" max="15" value="8">
-                            <span id="rowCountDisplay" class="row-count-value">8</span>
-                        </div>
+                </div>
+
+                <div class="row-count-selector">
+                    <label for="rowCount">Table Rows:</label>
+                    <div class="row-count-controls">
+                        <input type="range" id="rowCount" min="1" max="15" value="8">
+                        <span id="rowCountDisplay" class="row-count-value">8</span>
                     </div>
                 </div>
             </section>

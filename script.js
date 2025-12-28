@@ -31,9 +31,15 @@ const GPIO_PORTS = {
 
 let currentPort = 'F';
 let baseAddress = 0x40025000;
-let portValue = 0x00;  // Current port data value (8 bits)
+let portValue = 0x00;  // Current port data value (8 bits) - the data latch
 let rowCount = 8;      // Number of table rows (1-15)
 let lastEditedCell = null;
+
+// GPIO Configuration Registers
+let dirReg = 0x00;     // Direction: 1=Output, 0=Input
+let denReg = 0x00;     // Digital Enable
+let purReg = 0x00;     // Pull-Up Resistor
+let pdrReg = 0x00;     // Pull-Down Resistor
 
 // =====================================================
 // Utility Functions
@@ -101,15 +107,57 @@ function calculateAddress(mask) {
 }
 
 /**
+ * Get the effective GPIO data value considering DIR/DEN/PUR/PDR
+ * 
+ * For OUTPUT bits (DIR=1): returns the latch value
+ * For INPUT bits (DIR=0): 
+ *   - If DEN=1: returns pin state based on PUR/PDR
+ *   - If DEN=0: returns 0 (undefined/floating)
+ * 
+ * @returns {number} - The effective port data value (8 bits)
+ */
+function getEffectivePortValue() {
+    let result = 0x00;
+
+    for (let bit = 0; bit < 8; bit++) {
+        const bitMask = 1 << bit;
+        const isOutput = (dirReg & bitMask) !== 0;
+        const isDigitalEnabled = (denReg & bitMask) !== 0;
+        const hasPullUp = (purReg & bitMask) !== 0;
+        const hasPullDown = (pdrReg & bitMask) !== 0;
+
+        if (isOutput) {
+            // Output: show latch value
+            result |= (portValue & bitMask);
+        } else {
+            // Input: show pin state based on DEN and pull resistors
+            if (isDigitalEnabled) {
+                if (hasPullUp) {
+                    result |= bitMask;  // Pull-up: reads 1
+                } else if (hasPullDown) {
+                    // Pull-down: reads 0 (already 0)
+                } else {
+                    // No pull: floating, undefined - show 0
+                }
+            }
+            // If DEN=0, bit stays 0 (digital buffer disabled)
+        }
+    }
+
+    return result;
+}
+
+/**
  * Calculate what value is displayed at an address
- * displayed = portValue & mask
+ * displayed = effectivePortValue & mask
  * 
  * @param {number} address - The GPIO address
  * @returns {number} - The displayed value
  */
 function getDisplayedValue(address) {
     const mask = calculateMask(address);
-    return portValue & mask;
+    const effectiveValue = getEffectivePortValue();
+    return effectiveValue & mask;
 }
 
 /**
@@ -155,13 +203,11 @@ function generateTable() {
         // Value cells (4 per row)
         for (let col = 0; col < 4; col++) {
             const cellAddress = rowAddress + (col * 0x04);
-            const mask = calculateMask(cellAddress);
-            const displayValue = portValue & mask;
+            const displayValue = getDisplayedValue(cellAddress);
 
             const td = document.createElement('td');
             td.className = 'value-cell';
             td.dataset.address = cellAddress;
-            td.dataset.mask = mask;
             td.dataset.row = row;
             td.dataset.col = col;
             td.textContent = toHex(displayValue);
@@ -184,8 +230,7 @@ function updateAllCells() {
 
     cells.forEach(cell => {
         const address = parseInt(cell.dataset.address);
-        const mask = calculateMask(address);
-        const displayValue = portValue & mask;
+        const displayValue = getDisplayedValue(address);
 
         cell.textContent = toHex(displayValue);
 
@@ -426,11 +471,6 @@ function showPlaceholder() {
 // =====================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Port button handlers
-    document.querySelectorAll('.port-btn').forEach(btn => {
-        btn.addEventListener('click', handlePortClick);
-    });
-
     // Row count slider handler
     const rowCountSlider = document.getElementById('rowCount');
     const rowCountDisplay = document.getElementById('rowCountDisplay');
@@ -440,6 +480,9 @@ document.addEventListener('DOMContentLoaded', () => {
         rowCountDisplay.textContent = rowCount;
         generateTable();
     });
+
+    // Register input handlers
+    setupRegisterInputs();
 
     // Generate initial table
     generateTable();
@@ -459,3 +502,42 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// =====================================================
+// Register Input Functions
+// =====================================================
+
+/**
+ * Setup register manual input handlers
+ */
+function setupRegisterInputs() {
+    const registers = [
+        { inputId: 'dirInput', setter: (v) => dirReg = v },
+        { inputId: 'denInput', setter: (v) => denReg = v },
+        { inputId: 'purInput', setter: (v) => purReg = v },
+        { inputId: 'pdrInput', setter: (v) => pdrReg = v }
+    ];
+
+    registers.forEach(reg => {
+        const input = document.getElementById(reg.inputId);
+
+        if (!input) return;
+
+        // Update on input change (blur or enter)
+        const handleChange = () => {
+            const value = parseHex(input.value);
+            if (value !== null) {
+                reg.setter(value & 0xFF);  // Limit to 8 bits
+                generateTable();
+            }
+        };
+
+        input.addEventListener('blur', handleChange);
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                handleChange();
+                input.blur();
+            }
+        });
+    });
+}
