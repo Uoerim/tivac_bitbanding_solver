@@ -514,8 +514,7 @@ function setupRegisterInputs() {
     const registers = [
         { inputId: 'dirInput', setter: (v) => dirReg = v },
         { inputId: 'denInput', setter: (v) => denReg = v },
-        { inputId: 'purInput', setter: (v) => purReg = v },
-        { inputId: 'pdrInput', setter: (v) => pdrReg = v }
+        { inputId: 'purInput', setter: (v) => purReg = v }
     ];
 
     registers.forEach(reg => {

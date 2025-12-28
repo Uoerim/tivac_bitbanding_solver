@@ -31,8 +31,6 @@
                 </svg>
                 Report an Issue
             </a>
-            <p class="modal-note">📚 Check the <strong>end of the page</strong> for important notes about when
-                DIR/DEN/PUR matter!</p>
             <p class="modal-attribution">Made with ❤️ by <strong>Yosif Ibrahim</strong> | MIT Licensed</p>
             <button id="closeModal" class="btn-primary">I Understand</button>
         </div>
@@ -107,16 +105,6 @@
                             <div class="input-with-prefix">
                                 <span class="prefix">=</span>
                                 <input type="text" id="purInput" value="0x00" placeholder="0x00">
-                            </div>
-                        </div>
-                        <div class="register-input-item">
-                            <label for="pdrInput">
-                                <span class="reg-name">GPIO_PORTF_PDR</span>
-                                <span class="reg-desc">Pull-Down Resistor</span>
-                            </label>
-                            <div class="input-with-prefix">
-                                <span class="prefix">=</span>
-                                <input type="text" id="pdrInput" value="0x00" placeholder="0x00">
                             </div>
                         </div>
                     </div>
@@ -236,43 +224,6 @@
                                 <code>Offset 0x3FC</code>
                                 <span>→ Mask 0xFF (all bits)</span>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Important Notes Section -->
-                    <div class="important-notes">
-                        <h4>⚠️ Important: When Do DIR/DEN/PUR Matter?</h4>
-                        <div class="note-card note-info">
-                            <h5>📊 For the Memory Table (Exam Questions)</h5>
-                            <p>The memory table values depend <strong>ONLY</strong> on:</p>
-                            <ul>
-                                <li>The data latch value (what you last wrote via any masked alias)</li>
-                                <li>The mask calculated from the address</li>
-                            </ul>
-                            <p><strong>DIR, DEN, PUR do NOT affect the memory table values.</strong> Even if all
-                                registers were 0, the table would show the same values.</p>
-                        </div>
-                        <div class="note-card note-warning">
-                            <h5>💡 For Hardware to Work (LEDs, Buttons)</h5>
-                            <p>To make the write "work electrically" on the real Tiva board:</p>
-                            <ul>
-                                <li><strong>DIR = 0x0E</strong> → PF1–PF3 are outputs (LEDs), PF0 & PF4 are inputs
-                                    (switches)</li>
-                                <li><strong>DEN = 0x1F</strong> → PF0–PF4 have digital I/O enabled</li>
-                                <li><strong>PUR = 0x10</strong> → PF4 has pull-up so button reads HIGH when not pressed
-                                </li>
-                            </ul>
-                            <p>The CPU can always write to memory; these settings only decide whether the <strong>pins
-                                    actually see the effect</strong>.</p>
-                        </div>
-                        <div class="note-card note-example">
-                            <h5>📝 Example</h5>
-                            <p>Writing <code>0x0F</code> to <code>0x4002503C</code> (mask 0x0F) sets latch bits 0–3 to
-                                1.</p>
-                            <p>The memory table shows <code>0x00...0x0F</code> pattern <strong>regardless</strong> of
-                                DIR/DEN/PUR.</p>
-                            <p>But LEDs only light up if those bits are configured as outputs (DIR=1) and digital
-                                enabled (DEN=1).</p>
                         </div>
                     </div>
                 </div>

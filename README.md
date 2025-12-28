@@ -28,11 +28,11 @@ A professional web-based calculator for solving TivaC TM4C123 GPIO bit-banding a
 
 ### Key Features
 
-- 🎯 **GPIO Data Masking Calculator** - Calculate masked values for GPIO port addresses
+- 🎯 **GPIO Data Masking Calculator** - Calculate masked values for GPIO Port F addresses
 - 📊 **Interactive Memory Table** - Click any cell to edit and see all values update automatically
 - 📝 **Step-by-Step Explanations** - Detailed breakdown of each calculation
+- ⚙️ **Register Configuration** - Set DIR, DEN, PUR values with hex input
 - 🔧 **Configurable Table Size** - Adjust rows from 1 to 15
-- 🔘 **Port Selection** - Switch between GPIO Ports A-F
 - 🎨 **Modern UI** - Professional dark theme with glassmorphism effects
 
 ---
@@ -65,7 +65,7 @@ Only bits where the mask has 1s are affected by the write.
 
 2. Open `index.html` in your browser
 
-3. Select a GPIO port (A-F)
+3. Configure GPIO Port F registers (DIR, DEN, PUR)
 
 4. Adjust the table rows if needed (1-15)
 
@@ -75,33 +75,10 @@ Only bits where the mask has 1s are affected by the write.
 
 ---
 
-## 📚 Important Notes
-
-### For Exam Questions (Memory Table)
-The memory table values depend **ONLY** on:
-- The data latch value (what you last wrote)
-- The mask calculated from the address
-
-**DIR, DEN, PUR do NOT affect the memory table values.**
-
-### For Hardware (LEDs, Buttons)
-To make writes work electrically on real hardware:
-- **DIR** - Direction (1=Output, 0=Input)
-- **DEN** - Digital Enable
-- **PUR** - Pull-Up Resistor
-- **PDR** - Pull-Down Resistor
-
----
-
-## 📋 GPIO Port Base Addresses
+## 📋 GPIO Port F Base Address
 
 | Port | Base Address |
 |------|--------------|
-| A    | 0x40004000   |
-| B    | 0x40005000   |
-| C    | 0x40006000   |
-| D    | 0x40007000   |
-| E    | 0x40024000   |
 | F    | 0x40025000   |
 
 ---
