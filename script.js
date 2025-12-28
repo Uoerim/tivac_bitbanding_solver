@@ -174,8 +174,6 @@ function generateTable() {
 
         tableBody.appendChild(tr);
     }
-
-    updatePortValueDisplay();
 }
 
 /**
@@ -195,8 +193,6 @@ function updateAllCells() {
         cell.classList.add('edited');
         setTimeout(() => cell.classList.remove('edited'), 500);
     });
-
-    updatePortValueDisplay();
 }
 
 /**
