@@ -131,6 +131,18 @@
     color: var(--accent-primary);
 }
 
+.star-link {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: var(--warning);
+    color: var(--warning);
+}
+
+.star-link:hover {
+    background: rgba(245, 158, 11, 0.2);
+    border-color: var(--warning);
+    color: var(--warning);
+}
+
 .modal-content .btn-primary {
     width: 100%;
     margin-top: var(--space-md);

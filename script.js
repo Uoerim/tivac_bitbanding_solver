@@ -200,14 +200,6 @@ function updateAllCells() {
 }
 
 /**
- * Update the port value display
- */
-function updatePortValueDisplay() {
-    document.getElementById('currentPortValue').textContent = toHexShort(portValue);
-    document.getElementById('currentPortBinary').textContent = `(${toBinary(portValue)})`;
-}
-
-/**
  * Handle cell click for editing
  */
 function handleCellClick(event) {
