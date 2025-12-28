@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TivaC GPIO Bit-Banding Solver | ARM Cortex-M4</title>
+    <meta name="description"
+        content="Professional GPIO bit-banding and data masking calculator for TivaC ARM Cortex-M4 microcontrollers">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Experimental Warning Modal -->
+    <div id="warningModal" class="modal-overlay">
+        <div class="modal-content glass-card">
+            <div class="modal-icon">⚠️</div>
+            <h2>Experimental Project</h2>
+            <p>This project is currently in <strong>experimental phase</strong>. You may encounter bugs or unexpected
+                behavior.</p>
+            <p class="modal-hint">If you find any issues, please report them on GitHub:</p>
+            <a href="https://github.com/Uoerim/tivac_bitbanding_solver/issues" target="_blank" class="github-link">
+                <svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
+                    <path
+                        d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+                </svg>
+                Report an Issue
+            </a>
+            <button id="closeModal" class="btn-primary">I Understand</button>
+        </div>
+    </div>
+
+    <div class="background-effects">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>TivaC GPIO Bit-Banding Solver</h1>
+                    <p class="subtitle">ARM Cortex-M4 Masked Data & Bit-Band Calculator</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- GPIO Configuration Panel -->
+            <section class="config-panel glass-card">
+                <h2 class="section-title">
+                    <span class="title-icon">⚙️</span>
+                    GPIO Port Configuration
+                </h2>
+                <div class="gpio-port-selector">
+                    <label>Select GPIO Port:</label>
+                    <div class="port-buttons">
+                        <button class="port-btn" data-port="A" data-base="0x40004000">Port A</button>
+                        <button class="port-btn" data-port="B" data-base="0x40005000">Port B</button>
+                        <button class="port-btn" data-port="C" data-base="0x40006000">Port C</button>
+                        <button class="port-btn" data-port="D" data-base="0x40007000">Port D</button>
+                        <button class="port-btn" data-port="E" data-base="0x40024000">Port E</button>
+                        <button class="port-btn active" data-port="F" data-base="0x40025000">Port F</button>
+                    </div>
+                </div>
+
+                <div class="register-config">
+                    <h3>Register Configuration (like exam questions)</h3>
+                    <div class="register-inputs">
+                        <div class="register-input-group">
+                            <label>
+                                <span class="reg-label">GPIO_PORT<span id="portLetter">F</span>_DIR</span>
+                                <span class="reg-desc">Direction (1=Output, 0=Input)</span>
+                            </label>
+                            <div class="input-with-prefix">
+                                <span class="prefix">|=</span>
+                                <input type="text" id="dirValue" value="0x0F" placeholder="0x0F">
+                            </div>
+                        </div>
+                        <div class="register-input-group">
+                            <label>
+                                <span class="reg-label">GPIO_PORT<span id="portLetter2">F</span>_DEN</span>
+                                <span class="reg-desc">Digital Enable</span>
+                            </label>
+                            <div class="input-with-prefix">
+                                <span class="prefix">|=</span>
+                                <input type="text" id="denValue" value="0x1F" placeholder="0x1F">
+                            </div>
+                        </div>
+                        <div class="register-input-group">
+                            <label>
+                                <span class="reg-label">GPIO_PORT<span id="portLetter3">F</span>_PUR</span>
+                                <span class="reg-desc">Pull-Up Resistor</span>
+                            </label>
+                            <div class="input-with-prefix">
+                                <span class="prefix">|=</span>
+                                <input type="text" id="purValue" value="0x10" placeholder="0x10">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="port-value-display">
+                    <h3>Current Port Data Value</h3>
+                    <div class="port-value-container">
+                        <span class="port-value-label">Port Value:</span>
+                        <span class="port-value" id="currentPortValue">0x00</span>
+                        <span class="port-value-binary" id="currentPortBinary">(00000000)</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Memory Table Section -->
+            <section class="table-section glass-card">
+                <h2 class="section-title">
+                    <span class="title-icon">📊</span>
+                    GPIO Masked Data Memory Table
+                </h2>
+                <p class="table-instruction">
+                    <span class="instruction-icon">💡</span>
+                    Click any cell to write a value. The port value updates based on the address mask.
+                </p>
+                <div class="table-info">
+                    <div class="info-item">
+                        <span class="info-label">Base Address:</span>
+                        <code id="baseAddressDisplay">0x40025000</code>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Formula:</span>
+                        <code>mask = (address - base) / 4</code>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Cell Value:</span>
+                        <code>portValue & mask</code>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table class="memory-table" id="memoryTable">
+                        <thead>
+                            <tr>
+                                <th class="address-header">Address</th>
+                                <th>+0x0</th>
+                                <th>+0x4</th>
+                                <th>+0x8</th>
+                                <th>+0xC</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Generated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Step-by-Step Solution Section -->
+            <section class="explanation-section glass-card">
+                <h2 class="section-title">
+                    <span class="title-icon">📝</span>
+                    Step-by-Step Solution
+                </h2>
+                <div id="explanationContent" class="explanation-content">
+                    <div class="explanation-placeholder">
+                        <span class="placeholder-icon">👆</span>
+                        <p>Click any cell in the table to see the step-by-step calculation.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Theory Reference Section -->
+            <section class="theory-section glass-card">
+                <h2 class="section-title">
+                    <span class="title-icon">📚</span>
+                    GPIO Data Masking Theory
+                </h2>
+                <div class="theory-content">
+                    <div class="formula-card">
+                        <h3>Address Masking Formula</h3>
+                        <code class="formula">mask = (address - base_address) / 4</code>
+                        <p class="formula-desc">Each address offset corresponds to a different bit mask</p>
+                    </div>
+                    <div class="formula-card">
+                        <h3>Write Operation</h3>
+                        <code class="formula">new_port = (old_port & ~mask) | (write_value & mask)</code>
+                        <p class="formula-desc">Only bits where mask=1 are affected by the write</p>
+                    </div>
+                    <div class="formula-card">
+                        <h3>Read Operation (Cell Display)</h3>
+                        <code class="formula">displayed_value = port_value & mask</code>
+                        <p class="formula-desc">Each cell shows only the bits that its mask allows</p>
+                    </div>
+                    <div class="mask-examples">
+                        <h4>Common Mask Examples</h4>
+                        <div class="mask-grid">
+                            <div class="mask-item">
+                                <code>Offset 0x04</code>
+                                <span>→ Mask 0x01 (bit 0)</span>
+                            </div>
+                            <div class="mask-item">
+                                <code>Offset 0x08</code>
+                                <span>→ Mask 0x02 (bit 1)</span>
+                            </div>
+                            <div class="mask-item">
+                                <code>Offset 0x3C</code>
+                                <span>→ Mask 0x0F (bits 0-3)</span>
+                            </div>
+                            <div class="mask-item">
+                                <code>Offset 0x40</code>
+                                <span>→ Mask 0x10 (bit 4)</span>
+                            </div>
+                            <div class="mask-item">
+                                <code>Offset 0x7C</code>
+                                <span>→ Mask 0x1F (bits 0-4)</span>
+                            </div>
+                            <div class="mask-item">
+                                <code>Offset 0x3FC</code>
+                                <span>→ Mask 0xFF (all bits)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Built for TivaC TM4C123 | ARM Cortex-M4 Architecture</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
