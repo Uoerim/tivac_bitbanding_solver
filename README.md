@@ -30,7 +30,6 @@ A professional web-based calculator for solving TivaC TM4C123 GPIO bit-banding a
 
 - 🎯 **GPIO Data Masking Calculator** - Calculate masked values for GPIO Port F addresses
 - 📊 **Interactive Memory Table** - Click any cell to edit and see all values update automatically
-- 📝 **Step-by-Step Explanations** - Detailed breakdown of each calculation
 - ⚙️ **Register Configuration** - Set DIR, DEN, PUR values with hex input
 - 🔧 **Configurable Table Size** - Adjust rows from 1 to 15
 - 🎨 **Modern UI** - Professional dark theme with glassmorphism effects
@@ -69,9 +68,7 @@ Only bits where the mask has 1s are affected by the write.
 
 4. Adjust the table rows if needed (1-15)
 
-5. Click any cell in the memory table to edit
-
-6. Watch all values update and read the step-by-step explanation!
+5. Click any cell in the memory table to edit values
 
 ---
 
