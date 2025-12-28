@@ -220,8 +220,8 @@
                             <h5>💡 For Hardware to Work (LEDs, Buttons)</h5>
                             <p>To make the write "work electrically" on the real Tiva board:</p>
                             <ul>
-                                <li><strong>DIR = 0x0F</strong> → PF0–PF3 are outputs (for LEDs), PF4 is input (for
-                                    button)</li>
+                                <li><strong>DIR = 0x0E</strong> → PF1–PF3 are outputs (LEDs), PF0 & PF4 are inputs
+                                    (switches)</li>
                                 <li><strong>DEN = 0x1F</strong> → PF0–PF4 have digital I/O enabled</li>
                                 <li><strong>PUR = 0x10</strong> → PF4 has pull-up so button reads HIGH when not pressed
                                 </li>
