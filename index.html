@@ -115,6 +115,16 @@
                                 <input type="text" id="purValue" value="0x10" placeholder="0x10">
                             </div>
                         </div>
+                        <div class="register-input-group">
+                            <label>
+                                <span class="reg-label">GPIO_PORT<span id="portLetter4">F</span>_PDR</span>
+                                <span class="reg-desc">Pull-Down Resistor</span>
+                            </label>
+                            <div class="input-with-prefix">
+                                <span class="prefix">|=</span>
+                                <input type="text" id="pdrValue" value="0x00" placeholder="0x00">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -235,6 +245,43 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Important Notes Section -->
+                    <div class="important-notes">
+                        <h4>⚠️ Important: When Do DIR/DEN/PUR Matter?</h4>
+                        <div class="note-card note-info">
+                            <h5>📊 For the Memory Table (Exam Questions)</h5>
+                            <p>The memory table values depend <strong>ONLY</strong> on:</p>
+                            <ul>
+                                <li>The data latch value (what you last wrote via any masked alias)</li>
+                                <li>The mask calculated from the address</li>
+                            </ul>
+                            <p><strong>DIR, DEN, PUR do NOT affect the memory table values.</strong> Even if all
+                                registers were 0, the table would show the same values.</p>
+                        </div>
+                        <div class="note-card note-warning">
+                            <h5>💡 For Hardware to Work (LEDs, Buttons)</h5>
+                            <p>To make the write "work electrically" on the real Tiva board:</p>
+                            <ul>
+                                <li><strong>DIR = 0x0F</strong> → PF0–PF3 are outputs (for LEDs), PF4 is input (for
+                                    button)</li>
+                                <li><strong>DEN = 0x1F</strong> → PF0–PF4 have digital I/O enabled</li>
+                                <li><strong>PUR = 0x10</strong> → PF4 has pull-up so button reads HIGH when not pressed
+                                </li>
+                            </ul>
+                            <p>The CPU can always write to memory; these settings only decide whether the <strong>pins
+                                    actually see the effect</strong>.</p>
+                        </div>
+                        <div class="note-card note-example">
+                            <h5>📝 Example</h5>
+                            <p>Writing <code>0x0F</code> to <code>0x4002503C</code> (mask 0x0F) sets latch bits 0–3 to
+                                1.</p>
+                            <p>The memory table shows <code>0x00...0x0F</code> pattern <strong>regardless</strong> of
+                                DIR/DEN/PUR.</p>
+                            <p>But LEDs only light up if those bits are configured as outputs (DIR=1) and digital
+                                enabled (DEN=1).</p>
+                        </div>
+                    </div>
                 </div>
             </section>
         </main>
@@ -242,6 +289,12 @@
         <!-- Footer -->
         <footer class="footer">
             <p>Built for TivaC TM4C123 | ARM Cortex-M4 Architecture</p>
+            <p class="footer-attribution">Made with <span class="heart">❤️</span> by <strong>Yosif Ibrahim</strong> |
+                MIT Licensed</p>
+            <p class="footer-links">
+                <a href="https://github.com/Uoerim/tivac_bitbanding_solver" target="_blank">GitHub</a> ·
+                <a href="https://github.com/Uoerim/tivac_bitbanding_solver/issues" target="_blank">Report Issues</a>
+            </p>
         </footer>
     </div>
 
